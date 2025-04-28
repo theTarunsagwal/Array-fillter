@@ -141,24 +141,43 @@
             max-height: 50vh;
             overflow-y: auto;
             padding-right: 10px;
+            overflow-x: hidden;
             box-sizing: border-box;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        #list::-webkit-scrollbar {
+            display: none;
         }
 
         #list p {
-    counter-increment: fruit-counter; 
-    position: relative;
-    padding-left: 35px;
-}
+            counter-increment: fruit-counter;
+            position: relative;
+            cursor: pointer;
+            scale: .9;
+            padding-left: 35px;
+        }
 
-#list p::before {
-    content: counter(fruit-counter) ". "; 
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: gray;
-    font-weight: bold;
-}
+        #list p::before {
+            content: counter(fruit-counter) ". ";
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: gray;
+            font-weight: bold;
+        }
+
+        #list p.hovered {
+            transform: scale(1.1);
+            z-index: 1;
+        }
+
+        #list.hovering p:not(.hovered) {
+            filter: blur(1px);
+            opacity: 0.6;
+        }
 
         .sub {
             font-weight: bold;
@@ -244,7 +263,7 @@
             let abc = document.querySelector("#name");
             let value = abc.value.trim();
             if (value !== "") {
-                fruits.push({ name: value, favorite: false });
+                fruits.unshift({ name: value, favorite: false });
                 saveToLocal();
                 renderlist();
             } else {
@@ -308,6 +327,7 @@
                 }
             });
 
+
             if (!found && fruits.length > 0) {
                 p.innerHTML = `<p>No result found "${document.querySelector("#search").value}"</p>`;
                 p.style.color = "gray";
@@ -322,6 +342,21 @@
             document.getElementById('badge').innerText = fruits.length;
         };
 
+        const listElement = document.querySelector("#list");
+
+        listElement.addEventListener('mouseover', (e) => {
+            if (e.target.tagName.toLowerCase() === 'p') {
+                e.target.classList.add('hovered');
+                listElement.classList.add('hovering');
+            }
+        });
+
+        listElement.addEventListener('mouseout', (e) => {
+            if (e.target.tagName.toLowerCase() === 'p') {
+                e.target.classList.remove('hovered');
+                listElement.classList.remove('hovering');
+            }
+        });
 
         renderlist();
     </script>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array class</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Tagesschrift&display=swap"
+        rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <!--
+    Q1. Array kya hota hai ? 
+    
+    Ans. JavaScript mein, array ek aisa container ya box hota hai jisme hum multiple values ko ek hi naam ke andar store kar sakte hain.
+
+    Ex:- 
+
+    Socho array ek thaila hai — usmein tum aam, seb, kela sab ek ke baad ek daal sakte ho, bas unka number hota hai (index) jisse pehchaan hoti hai. 
+    -->
+    <!-- 
+     JavaScript Array – Basic Syntax:
+     var fruits = ["apple","banana","mango"];
+    ... isa me {_ FRUITS _} ek array ha ...
+    ... isme {_ 3 ELEMENTS _} hain ...
+    ... index hamesha {_ 0 _} se start hota ha ... 
+    -->
+    <!-- 
+    Access karna (Array ke andar se cheez nikaalna):
+    console.log(fruits[1]) 
+    Ans. Banana
+    -->
+    <!-- 
+    Add karna (element daalna array mein):
+    Fruits.push("orange"); // ye array ke last me add kar ta hai
+    Fruits.unshift("grapes"); // ye starting me add kar ta hai 
+    -->
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Tagesschrift", system-ui;
+            font-weight: 400;
+            font-style: normal;
+            background-color: #f8f9fa;
+            padding: 2rem;
+        }
+
+        .array_list-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .list-item_style {
+            width: 100%;
+            max-width: 360px;
+            background: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        #name,
+        #search {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        #name:focus,
+        #search:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+        }
+
+        #add,
+        #btn,
+        #clearAll {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #add:hover,
+        #btn:hover,
+        #clearAll:hover {
+            background-color: #45a049;
+        }
+
+        .list-item_style>div p {
+            background: white;
+            font-family: "Cascadia Code", sans-serif;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            word-break: break-word;
+            transition: all 0.3s ease;
+        }
+        #list {
+    max-height: 50vh; 
+    overflow-y: auto; 
+    padding-right: 10px; 
+    box-sizing: border-box;
+}
+
+
+        .sub {
+            font-weight: bold;
+            color: red;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sub:hover {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.3s ease;
+        }
+
+        .fav {
+            font-size: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .fav:hover {
+            color: orange;
+        }
+
+        #showFavorites {
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .fav-item {
+    background-color: #ffeb3b; 
+    border: 2px solid #fbc02d;
+}
+
+.fav-item p {
+    background-color: #fff3b0; 
+}
+
+    </style>
+    </head>
+
+    <div class="array_list-item">
+        <h1>Array Listing Formatting <span id="badge"
+                style="background: #4CAF50; color: white; padding: 5px 10px; border-radius: 20px; font-size: 16px;">0</span>
+        </h1>
+
+        <div class="list-item_style">
+            <div class="input-group">
+                <input type="text" id="name" placeholder="Add what you want...">
+                <button id="add">+</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="search" placeholder="Search fruit...">
+                <button id="btn">Search</button>
+            </div>
+            <div class="input-group">
+                <label>
+                    <input type="checkbox" id="showFavorites">
+                    Show Favorites Only
+                </label>
+                <button id="clearAll">Clear All</button>
+            </div>
+            <div id="list"></div>
+        </div>
+    </div>
+
+    <script>
+        let fruits = JSON.parse(localStorage.getItem('fruits')) || [];
+
+        document.querySelector("#name").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                document.querySelector("#add").click();
+            }
+        });
+
+        document.querySelector("#add").addEventListener("click", () => {
+            let abc = document.querySelector("#name");
+            let value = abc.value.trim();
+            if (value !== "") {
+                fruits.push({ name: value, favorite: false });
+                saveToLocal();
+                renderlist();
+            } else {
+                alert("Please add something!");
+            }
+        });
+
+        document.querySelector("#search").addEventListener("input", () => {
+            renderlist();
+        });
+
+        document.querySelector("#showFavorites").addEventListener("change", () => {
+            renderlist();
+        });
+
+        document.querySelector("#clearAll").addEventListener("click", () => {
+            if (confirm("Are you sure you want to clear all fruits?")) {
+                fruits = [];
+                localStorage.removeItem('fruits');
+                renderlist();
+            }
+        });
+
+        const renderlist = () => {
+    let p = document.querySelector("#list");
+    p.innerHTML = "";
+    let keyword = document.querySelector("#search").value.trim().toLowerCase();
+    let onlyFavorites = document.querySelector("#showFavorites").checked;
+    let found = false;
+
+    fruits.forEach((ab, index) => {
+        if (ab.name.toLowerCase().includes(keyword) && (!onlyFavorites || ab.favorite)) {
+            found = true;
+            let fromindex = index <= 9 ? `0${index}` : index;
+            let item = document.createElement("p");
+
+            if (ab.favorite) {
+                item.classList.add("fav-item");
+            }
+
+            item.innerHTML = `
+                ${fromindex}. ${ab.name}
+                <span class="sub" data-index="${index}">-</span>
+                <span class="fav" data-index="${index}" style="color:${ab.favorite ? 'gold' : 'gray'};">&#9733;</span>`;
+            p.appendChild(item);
+
+            item.querySelector(".sub").addEventListener("click", () => {
+                item.classList.add("fade-out");
+                setTimeout(() => {
+                    fruits.splice(index, 1);
+                    saveToLocal();
+                    renderlist();
+                }, 300);
+            });
+
+            item.querySelector(".fav").addEventListener("click", () => {
+                fruits[index].favorite = !fruits[index].favorite;
+                saveToLocal();
+                renderlist();
+            });
+        }
+    });
+
+    if (!found && fruits.length > 0) {
+        p.innerHTML = `<p>No result found "${document.querySelector("#search").value}"</p>`;
+        p.style.color = "gray";
+    }
+    document.querySelector("#name").value = "";
+
+    document.getElementById('badge').innerText = fruits.length;
+};
+
+const saveToLocal = () => {
+    localStorage.setItem('fruits', JSON.stringify(fruits));
+    document.getElementById('badge').innerText = fruits.length;
+};
+
+
+        renderlist();
+    </script>
+
+</body>
+
+</html>

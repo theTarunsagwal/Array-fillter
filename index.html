@@ -135,13 +135,30 @@
             word-break: break-word;
             transition: all 0.3s ease;
         }
+
         #list {
-    max-height: 50vh; 
-    overflow-y: auto; 
-    padding-right: 10px; 
-    box-sizing: border-box;
+            counter-reset: fruit-counter;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 10px;
+            box-sizing: border-box;
+        }
+
+        #list p {
+    counter-increment: fruit-counter; 
+    position: relative;
+    padding-left: 35px;
 }
 
+#list p::before {
+    content: counter(fruit-counter) ". "; 
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    font-weight: bold;
+}
 
         .sub {
             font-weight: bold;
@@ -177,15 +194,15 @@
             transform: scale(1.2);
             cursor: pointer;
         }
+
         .fav-item {
-    background-color: #ffeb3b; 
-    border: 2px solid #fbc02d;
-}
+            background-color: #ffeb3b;
+            border: 2px solid #fbc02d;
+        }
 
-.fav-item p {
-    background-color: #fff3b0; 
-}
-
+        .fav-item p {
+            background-color: #fff3b0;
+        }
     </style>
     </head>
 
@@ -252,58 +269,58 @@
         });
 
         const renderlist = () => {
-    let p = document.querySelector("#list");
-    p.innerHTML = "";
-    let keyword = document.querySelector("#search").value.trim().toLowerCase();
-    let onlyFavorites = document.querySelector("#showFavorites").checked;
-    let found = false;
+            let p = document.querySelector("#list");
+            p.innerHTML = "";
+            let keyword = document.querySelector("#search").value.trim().toLowerCase();
+            let onlyFavorites = document.querySelector("#showFavorites").checked;
+            let found = false;
 
-    fruits.forEach((ab, index) => {
-        if (ab.name.toLowerCase().includes(keyword) && (!onlyFavorites || ab.favorite)) {
-            found = true;
-            let fromindex = index <= 9 ? `0${index}` : index;
-            let item = document.createElement("p");
+            fruits.forEach((ab, index) => {
+                if (ab.name.toLowerCase().includes(keyword) && (!onlyFavorites || ab.favorite)) {
+                    found = true;
+                    let fromindex = index <= 9 ? `0${index}` : index;
+                    let item = document.createElement("p");
 
-            if (ab.favorite) {
-                item.classList.add("fav-item");
-            }
+                    if (ab.favorite) {
+                        item.classList.add("fav-item");
+                    }
 
-            item.innerHTML = `
-                ${fromindex}. ${ab.name}
+                    item.innerHTML = `
+                 ${ab.name}
                 <span class="sub" data-index="${index}">-</span>
                 <span class="fav" data-index="${index}" style="color:${ab.favorite ? 'gold' : 'gray'};">&#9733;</span>`;
-            p.appendChild(item);
+                    p.appendChild(item);
 
-            item.querySelector(".sub").addEventListener("click", () => {
-                item.classList.add("fade-out");
-                setTimeout(() => {
-                    fruits.splice(index, 1);
-                    saveToLocal();
-                    renderlist();
-                }, 300);
+                    item.querySelector(".sub").addEventListener("click", () => {
+                        item.classList.add("fade-out");
+                        setTimeout(() => {
+                            fruits.splice(index, 1);
+                            saveToLocal();
+                            renderlist();
+                        }, 300);
+                    });
+
+                    item.querySelector(".fav").addEventListener("click", () => {
+                        fruits[index].favorite = !fruits[index].favorite;
+                        saveToLocal();
+                        renderlist();
+                    });
+                }
             });
 
-            item.querySelector(".fav").addEventListener("click", () => {
-                fruits[index].favorite = !fruits[index].favorite;
-                saveToLocal();
-                renderlist();
-            });
-        }
-    });
+            if (!found && fruits.length > 0) {
+                p.innerHTML = `<p>No result found "${document.querySelector("#search").value}"</p>`;
+                p.style.color = "gray";
+            }
+            document.querySelector("#name").value = "";
 
-    if (!found && fruits.length > 0) {
-        p.innerHTML = `<p>No result found "${document.querySelector("#search").value}"</p>`;
-        p.style.color = "gray";
-    }
-    document.querySelector("#name").value = "";
+            document.getElementById('badge').innerText = fruits.length;
+        };
 
-    document.getElementById('badge').innerText = fruits.length;
-};
-
-const saveToLocal = () => {
-    localStorage.setItem('fruits', JSON.stringify(fruits));
-    document.getElementById('badge').innerText = fruits.length;
-};
+        const saveToLocal = () => {
+            localStorage.setItem('fruits', JSON.stringify(fruits));
+            document.getElementById('badge').innerText = fruits.length;
+        };
 
 
         renderlist();

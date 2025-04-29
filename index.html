@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Array class</title>
     <link rel="shortcut icon" href="./ChatGPT Image Apr 28, 2025, 05_45_25 PM (1).png" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap" rel="stylesheet">
@@ -225,52 +226,53 @@
         }
 
         @media (max-width: 500px) {
-    body {
-        padding: 1rem;
-    }
-    .array_list-item h1{
-        font-size: 21px;
-    }
+            body {
+                padding: 1rem;
+            }
 
-    .list-item_style {
-        max-width: 100%;
-        padding: 15px;
-    }
+            .array_list-item h1 {
+                font-size: 21px;
+            }
 
-    .input-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
+            .list-item_style {
+                max-width: 100%;
+                padding: 15px;
+            }
 
-    .input-group input, 
-    .input-group button {
-        width: 100%;
-    }
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
 
-    #add,
-    #btn,
-    #clearAll {
-        padding: 12px;
-        font-size: 18px;
-    }
+            .input-group input,
+            .input-group button {
+                width: 100%;
+            }
 
-    #name,
-    #search {
-        font-size: 18px;
-    }
+            #add,
+            #btn,
+            #clearAll {
+                padding: 12px;
+                font-size: 18px;
+            }
 
-    #list p {
-        scale: 1;
-    }
-    .input-group label{
-        padding: 10px;
-    }
+            #name,
+            #search {
+                font-size: 18px;
+            }
 
-    input#showFavorites {
-    width: auto;
-}
-}
+            #list p {
+                scale: 1;
+            }
 
+            .input-group label {
+                padding: 10px;
+            }
+
+            input#showFavorites {
+                width: auto;
+            }
+        }
     </style>
     </head>
 
@@ -356,7 +358,9 @@
                     item.innerHTML = `
                  ${ab.name}
                 <span class="sub" data-index="${index}">-</span>
-                <span class="fav" data-index="${index}" style="color:${ab.favorite ? 'gold' : 'gray'};">&#9733;</span>`;
+                <span class="fav" data-index="${index}" style="color:${ab.favorite ? 'gold' : 'gray'};">&#9733;</span>
+                <i id="edit" class='bx bxs-edit' title="Edit"></i>
+                `;
                     p.appendChild(item);
 
                     item.querySelector(".sub").addEventListener("click", () => {
@@ -373,6 +377,16 @@
                         saveToLocal();
                         renderlist();
                     });
+
+                    item.querySelector("#edit").addEventListener("click", () => {
+                        let newName = prompt("Edit the name:", ab.name);
+                        if (newName !== null && newName.trim() !== "") {
+                            fruits[index].name = newName.trim();
+                            saveToLocal();
+                            renderlist();
+                        }
+                    });
+
                 }
             });
 
